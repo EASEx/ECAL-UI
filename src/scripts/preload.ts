@@ -6,6 +6,9 @@ const api: Api = {
         getDataFromStore: async (key: string) => {
             return await ipcRenderer.invoke<Api>('getDataFromStore', key);
         },
+        submitURLs: async (serverURL: string, nbURL: string) => {
+            return await ipcRenderer.invoke<Api>('submitURLs', serverURL, nbURL);
+        }
     },
     on: {
         showAlert: (listener) => {
