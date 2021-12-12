@@ -1,21 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import ecalSocket from "./api/socket";
+import MainForm from "./views/MainForm";
 
 const App = () => {
+  useEffect(() => {
+    ecalSocket.connect();
+    window.ipcAPI.on.receiveDatafromJupyter((_, data) => {
+      console.log(data);
+    });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <MainForm />
     </div>
   );
 };
