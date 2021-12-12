@@ -22,12 +22,6 @@ const api: Api = {
         }
     },
     on: {
-        showAlert: (listener) => {
-            ipcRenderer.on<Api>('showAlert', listener);
-        },
-        logNotebookCells: (listener) => {
-            ipcRenderer.on<Api>('logNotebookCells', listener);
-        },
         askDatafromJupyter: (listener) => {
             ipcRenderer.on<Api>('askDatafromJupyter', listener)
         },
