@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron-typescript-ipc';
-import { Api } from './api';
+import { Api } from './api/api';
 import { Method } from 'axios';
 
 

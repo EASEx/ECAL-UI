@@ -7,7 +7,7 @@ export type Api = GetApiType<
         submitURLs: (serverURL: string, nbURL: string) => Promise<string>;
         request: (url: string, data: any, method: Method) => Promise<any>
         getDatafromJupyter: () => Promise<any>
-        sendDatafromJupyter: (data: any) => Promise<any>
+        sendDatafromJupyter: (data: any) => Promise<{ data: any, status: number | undefined }>
     },
     {
         askDatafromJupyter: () => Promise<void>
