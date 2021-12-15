@@ -96,16 +96,18 @@ if (!window.colabListeners) {
   window.ipcAPI.on.askDatafromJupyter(() => {
     if (window.document.URL.toString().includes("colab.research.google")) {
       var celldata = logNotebookCells();
-      var modules = listLoadedModules();
+      var writtenModules = listLoadedModules();
       var lastkeypressTime = window.lastkeypressTime || 0;
       console.log("received event askData");
+      var time = new Date();
       if (!window.lastDataCall || Date.now() - window.lastDataCall > 5000) {
         window.lastDataCall = Date.now();
         window.ipcAPI.invoke.sendDatafromJupyter({
           celldata,
-          modules,
+          writtenModules,
           lastkeypressTime,
           windowURL: window.document.URL,
+          timestamp: time.toTimeString(),
           mouseTrail: window.mouseTrail.slice(-1000) || [],
         });
       }

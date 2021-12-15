@@ -7,3 +7,10 @@ const URLS = atom({
         nbURL: ""
     }
 })
+
+const ROUTE = atom<'/' | '/bot'>({
+    key: 'ROUTE',
+    default: '/'
+})
+
+export { URLS, ROUTE }

@@ -47,6 +47,7 @@
           "@electron-forge/plugin-webpack",
           {
             "mainConfig": "./webpack.main.config.js",
+            "devContentSecurityPolicy": "default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:",
             "renderer": {
               "config": "./webpack.renderer.config.js",
               "entryPoints": [
@@ -82,6 +83,7 @@
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.0",
     "fork-ts-checker-webpack-plugin": "^6.0.1",
+    "html-webpack-plugin": "^5.5.0",
     "node-loader": "^2.0.0",
     "style-loader": "^3.0.0",
     "ts-loader": "^9.2.2",

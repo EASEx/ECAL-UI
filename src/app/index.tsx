@@ -15,8 +15,4 @@ function render() {
   );
 }
 
-window.ipcAPI.on.receiveDatafromJupyter((e, data) => {
-  console.log(data);
-});
-
 render();

@@ -8,7 +8,7 @@ import { Api } from "./api"
 const registerHandlers = (mainWindow: BrowserWindow, agentView: BrowserView, jupyterView: BrowserView) => {
     registerJupyterHandlers(mainWindow, agentView, jupyterView)
     registerAxiosHandlers()
-    registerSocketHandlers()
+    registerSocketHandlers(mainWindow, agentView, jupyterView)
     registerDatabaseHandlers()
     registerMenu()
 }

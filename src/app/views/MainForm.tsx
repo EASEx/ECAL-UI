@@ -1,11 +1,19 @@
 import React from "react";
 import { Form, Input, Button, Checkbox } from "antd";
+import { useSetRecoilState } from "recoil";
+import { ROUTE, URLS } from "../store";
 
 const MainForm = () => {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-
-    window.ipcAPI.invoke.getDatafromJupyter();
+  const setURLs = useSetRecoilState(URLS);
+  const setRoute = useSetRecoilState(ROUTE);
+  const onFinish = async (values: any) => {
+    window.ipcAPI.invoke.submitURLs(values.serverURL, values.nbURL).then(() => {
+      setURLs({
+        serverURL: values.serverURL,
+        nbURL: values.nbURL,
+      });
+      setRoute("/bot");
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -40,8 +48,16 @@ const MainForm = () => {
 
       <Form.Item
         label="Notebook URL"
-        name="url"
+        name="nbURL"
         rules={[{ required: true, message: "Please input the notebook url" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Server URL"
+        name="serverURL"
+        rules={[{ required: true, message: "Please input the server url" }]}
       >
         <Input />
       </Form.Item>
