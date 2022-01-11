@@ -19,6 +19,9 @@ const api: Api = {
         },
         sendDatafromJupyter: async (data: any) => {
             return await ipcRenderer.invoke<Api>('sendDatafromJupyter', data)
+        },
+        sendWarning: async (warning: string) => {
+            return await ipcRenderer.invoke<Api>('sendWarning', warning)
         }
     },
     on: {

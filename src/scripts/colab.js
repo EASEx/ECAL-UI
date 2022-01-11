@@ -29,35 +29,52 @@ var ecalLogger = {
  */
 var logNotebookCells = () => {
   var nodes = document.querySelectorAll(".cell.code");
-  var inputNodes = document.getElementsByClassName(
-    "inputarea horizontal layout code"
-  );
   var result = [];
-  if (nodes.length && inputNodes.length == nodes.length) {
+  if (nodes.length) {
     console.log(`We have ${nodes.length} nodes.`);
     nodes.forEach((node, i) => {
-      var runButton = node.getElementsByTagName("colab-run-button")[0];
-      result.push({
-        index: i,
-        input: inputNodes[i].innerText.trim() || "",
-        output:
-          node.innerText.replace(inputNodes[i].innerText, "").trim() || "",
-        isExecuted: runButton.executionCount ? true : false,
-        info: runButton.getInfo() || {},
-        hasError:
-          runButton.hasError ||
-          node.innerText
-            .replace(inputNodes[i].innerText, "")
-            .trim()
-            .toLowerCase()
-            .includes("error") ||
-          node.innerText
-            .replace(inputNodes[i].innerText, "")
-            .trim()
-            .toLowerCase()
-            .includes("traceback"),
-        busy: runButton.busy || false,
-      });
+      var runButton =
+        node.getElementsByTagName("colab-run-button").length == 1
+          ? node.getElementsByTagName("colab-run-button")[0]
+          : undefined;
+      var inputNode =
+        node.getElementsByClassName("inputarea horizontal layout code")
+          .length == 1
+          ? node.getElementsByClassName("inputarea horizontal layout code")[0]
+          : undefined;
+      if (inputNode && runButton) {
+        result.push({
+          index: i,
+          input: inputNode.innerText.trim() || "",
+          output: node.innerText.replace(inputNode.innerText, "").trim() || "",
+          isExecuted: runButton.executionCount ? true : false,
+          info: runButton.getInfo() || {
+            status: "",
+            timestamp: 0,
+            user_tz: 0,
+            elapsed: 0,
+            user: {
+              displayName: "",
+              photoUrl: "",
+              userId: "",
+            },
+            execution_count: 0,
+          },
+          hasError:
+            runButton.hasError ||
+            node.innerText
+              .replace(inputNode.innerText, "")
+              .trim()
+              .toLowerCase()
+              .includes("error") ||
+            node.innerText
+              .replace(inputNode.innerText, "")
+              .trim()
+              .toLowerCase()
+              .includes("traceback"),
+          busy: runButton.busy || false,
+        });
+      }
     });
   }
   return result;
@@ -91,42 +108,12 @@ var listLoadedModules = () => {
 };
 
 if (!window.colabListeners) {
-  window.mouseTrail = [];
-
-  window.ipcAPI.on.askDatafromJupyter(() => {
-    if (window.document.URL.toString().includes("colab.research.google")) {
-      var celldata = logNotebookCells();
-      var writtenModules = listLoadedModules();
-      var lastkeypressTime = window.lastkeypressTime || 0;
-      console.log("received event askData");
-      var time = new Date();
-      if (!window.lastDataCall || Date.now() - window.lastDataCall > 5000) {
-        window.lastDataCall = Date.now();
-        window.ipcAPI.invoke.sendDatafromJupyter({
-          celldata,
-          writtenModules,
-          lastkeypressTime,
-          windowURL: window.document.URL,
-          timestamp: time.toTimeString(),
-          mouseTrail: window.mouseTrail.slice(-1000) || [],
-        });
-      }
-    } else {
-      ecalLogger.warn(
-        "ECAL trying to read data from non Jupyter page. Ignoring!"
-      );
-    }
-  });
-
   document.addEventListener("keyup", () => {
-    window.lastkeypressTime = Date.now();
+    window.lastkeypressTime = Math.round(Date.now() / 1000);
   });
 
   document.addEventListener("mousemove", function (ev) {
-    window.mouseTrail.push({
-      x: ev.pageX,
-      y: ev.pageY,
-    });
+    window.lastmousemoveTime = Math.round(Date.now() / 1000);
   });
 
   window.colabListeners = true;

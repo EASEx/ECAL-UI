@@ -1,4 +1,4 @@
-import { BrowserView, BrowserWindow, } from "electron";
+import { BrowserView, BrowserWindow, dialog, } from "electron";
 import axios, { Method } from "axios";
 
 import { Api } from "./api";
@@ -7,7 +7,6 @@ import db from "../db";
 import fs from "fs"
 import { ipcMain } from "electron-typescript-ipc"
 import path from "path"
-import { ecalSocket } from ".";
 import ecalDB from "../db";
 
 export const registerJupyterHandlers = (mainWindow: BrowserWindow, agentView: BrowserView, jupyterView: BrowserView) => {
@@ -17,13 +16,23 @@ export const registerJupyterHandlers = (mainWindow: BrowserWindow, agentView: Br
 
     ipcMain.removeHandler<Api>('sendDatafromJupyter')
     ipcMain.handle<Api>('sendDatafromJupyter', async (_event, data) => {
-        ecalSocket.emit('jupyter_pong', { "metrics": data })
+        // ecalSocket.emit('jupyter_pong', { "metrics": data })
     })
 
     ipcMain.removeHandler<Api>('submitURLs')
     ipcMain.handle<Api>('submitURLs', async (_event, serverURL, nbURL) => {
         await jupyterView.webContents.loadURL(nbURL);
-        ecalSocket.connect()
+        var script = fs.readFileSync(path.join(__dirname, 'scripts', 'event.js'), 'utf-8')
+        jupyterView.webContents.executeJavaScript(script)
+    })
+
+    ipcMain.removeHandler<Api>('sendWarning')
+    ipcMain.handle<Api>('sendWarning', async (_event, warning: string) => {
+        // ecalSocket.emit('warning', { warning, timestamp: new Date().toTimeString() })
+        return await dialog.showMessageBox(mainWindow, {
+            title: 'Jupyter Notebook Modified',
+            message: warning
+        })
     })
 }
 

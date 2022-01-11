@@ -38,6 +38,8 @@ const createWindow = (): void => {
     registerHandlers(mainWindow, agentView, jupyterView)
   })
 
+
+
 };
 
 // This method will be called when Electron has finished

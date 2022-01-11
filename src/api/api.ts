@@ -8,6 +8,7 @@ export type Api = GetApiType<
         request: (url: string, data: any, method: Method) => Promise<any>
         getDatafromJupyter: () => Promise<any>
         sendDatafromJupyter: (data: any) => Promise<{ data: any, status: number | undefined }>
+        sendWarning: (warning: string) => Promise<void>
     },
     {
         askDatafromJupyter: () => Promise<void>
