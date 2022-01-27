@@ -24,13 +24,11 @@ if (window.sseSource === undefined) {
   window.sseSource.addEventListener(`jupyter_ping_${test_id}`, (ev) => {
     if (window.document.URL.toString().includes("colab.research.google")) {
       var celldata = logNotebookCells();
-      var writtenModules = listLoadedModules();
       var lastkeypressTime =
         window.lastkeypressTime || Math.round(Date.now() / 1000);
       var lastmousemoveTime =
         window.lastmousemoveTime || Math.round(Date.now() / 1000);
       console.log("received event askData");
-      var time = new Date();
       if (
         !window.lastDataCall ||
         Math.round(Date.now() / 1000) - window.lastDataCall > 20
@@ -47,6 +45,13 @@ if (window.sseSource === undefined) {
           }
         );
       }
+      window.ipcAPI.invoke.sendMetric(window.client_id, window.test_id, {
+        celldata,
+        lastmousemoveTime,
+        lastkeypressTime,
+        windowURL: window.document.URL,
+        timestamp: Math.round(Date.now() / 1000),
+      });
     } else {
       ecalLogger.warn(
         "ECAL trying to read data from non Jupyter page. Ignoring!"

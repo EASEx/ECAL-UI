@@ -2,11 +2,13 @@ import React from "react";
 import { Form, Input, Button, Checkbox } from "antd";
 import { useSetRecoilState } from "recoil";
 import { ROUTE, URLS } from "../store";
+import axios from "axios";
 
 const MainForm = () => {
   const setURLs = useSetRecoilState(URLS);
   const setRoute = useSetRecoilState(ROUTE);
   const onFinish = async (values: any) => {
+    await axios.post(`${values.serverURL}`);
     window.ipcAPI.invoke.submitURLs(values.serverURL, values.nbURL).then(() => {
       setURLs({
         serverURL: values.serverURL,
