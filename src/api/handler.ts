@@ -6,7 +6,7 @@ import db from "../db";
 
 import { ipcMain } from "electron-typescript-ipc";
 
-import { COLAB_SCRIPT, EVENT_SCRIPT } from "../scripts";
+import { COLAB_SCRIPT, EVENT_SCRIPT, FETCH_SCRIPT } from "../scripts";
 
 import Session, { Metrics } from "../models/session";
 
@@ -53,6 +53,7 @@ export const registerJupyterHandlers = (
 
   ipcMain.removeHandler<Api>("sendAction");
   ipcMain.handle<Api>("sendAction", async (_event, action: string) => {
+    await jupyterView.webContents.executeJavaScript(FETCH_SCRIPT);
     return agentView.webContents.send("renderAction", action);
   });
 };

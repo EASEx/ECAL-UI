@@ -61,6 +61,12 @@ if (window.sseSource === undefined) {
 
   window.sseSource.addEventListener(`trigger`, (ev) => {
     console.log(ev.data);
-    window.ipcAPI.invoke.sendAction(ev.data.toString());
+    var data = ev.data;
+    try {
+      data = JSON.parse(ev.data).dialogue;
+    } catch (error) {
+      ecalLogger.warn("Unable to parse JSON action!");
+    }
+    window.ipcAPI.invoke.sendAction(data);
   });
 }
