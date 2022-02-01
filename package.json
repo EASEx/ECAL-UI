@@ -1,7 +1,7 @@
 {
   "name": "ecal-ui",
   "productName": "ecal-ui",
-  "version": "1.0.1",
+  "version": "0.1.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
