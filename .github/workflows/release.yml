@@ -19,9 +19,9 @@ jobs:
         with:
           node-version: 14
       - name: Install Dependencies
-        run: yarn install
+        run: npm install
       - name: Build
-        run: yarn make
+        run: npm run make
       - name: Upload Production Artidacts
         uses: actions/upload-artifact@v2
         with:
