@@ -83,6 +83,7 @@ jobs:
           body: |
             ${{steps.changelog.outputs.changelog}}
             #{{steps.changelogv2.outputs.changelog}}
+          tag_name: ${{ steps.create_tag.outputs.version }}
 
       - name: 🧹 Cleanup
         uses: geekyeggo/delete-artifact@v1
