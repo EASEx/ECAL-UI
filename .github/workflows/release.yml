@@ -63,7 +63,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           stripGeneratorNotice: true
-          onlyLastTag: true
+          sinceTag: ${{ steps.create_tag.outputs.preversion }}
 
       - name: 📙 Generate changelog (Commits Only)
         id: changelogv2
