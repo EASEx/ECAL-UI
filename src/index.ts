@@ -53,7 +53,6 @@ const createWindow = (): void => {
 
   mainWindow.on("ready-to-show", () => {
     registerHandlers(mainWindow, agentView, jupyterView);
-    ecalDB.sequelize.sync();
   });
 };
 

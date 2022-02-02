@@ -8,7 +8,7 @@ import { ipcMain } from "electron-typescript-ipc";
 
 import { COLAB_SCRIPT, EVENT_SCRIPT, FETCH_SCRIPT } from "../scripts";
 
-import Session, { Metrics } from "../models/session";
+import { Metrics } from "../models/session";
 
 export const registerJupyterHandlers = (
   mainWindow: BrowserWindow,
@@ -35,11 +35,11 @@ export const registerJupyterHandlers = (
           .replace("%TEST_ID%", "507f1f77bcf86cd799439011")
           .replace("%SERVER_URL%", serverURL)
       );
-      await Session.create({
-        testId: "507f1f77bcf86cd799439011",
-        clientId: "abcd",
-        metrics: [],
-      });
+      // await Session.create({
+      //   testId: "507f1f77bcf86cd799439011",
+      //   clientId: "abcd",
+      //   metrics: [],
+      // });
     }
   );
 
@@ -72,16 +72,7 @@ export const registerDatabaseHandlers = (
   ipcMain.removeHandler<Api>("sendMetric");
   ipcMain.handle<Api>(
     "sendMetric",
-    async (_event, clientId: string, testId: string, metric: Metrics) => {
-      var session = await Session.findOne({
-        where: {
-          clientId,
-          testId,
-        },
-      });
-      session.metrics = [...session.metrics, metric];
-      await session.save();
-    }
+    async (_event, clientId: string, testId: string, metric: Metrics) => {}
   );
 };
 

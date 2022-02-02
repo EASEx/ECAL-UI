@@ -1,5 +1,3 @@
-import { Table, Model, Column, DataType } from "sequelize-typescript";
-
 interface CellData {
   index: number;
   input: string;
@@ -28,23 +26,3 @@ export interface Metrics {
   windowURL: string;
   timestamp: number;
 }
-
-@Table
-class Session extends Model {
-  @Column({
-    type: DataType.JSON,
-  })
-  metrics!: Metrics[];
-
-  @Column({
-    type: DataType.STRING,
-  })
-  clientId!: string;
-
-  @Column({
-    type: DataType.STRING,
-  })
-  testId!: string;
-}
-
-export default Session;
