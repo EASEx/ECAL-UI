@@ -63,6 +63,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           stripGeneratorNotice: true
+          onlyLastTag: true
 
       - name: 📙 Generate changelog (Commits Only)
         id: changelogv2
@@ -82,7 +83,7 @@ jobs:
             ubuntu-latest-artifacts/**
           body: |
             ${{steps.changelog.outputs.changelog}}
-            #{{steps.changelogv2.outputs.changelog}}
+            ${{steps.changelogv2.outputs.changelog}}
           tag_name: ${{ steps.create_tag.outputs.version }}
 
       - name: 🧹 Cleanup
