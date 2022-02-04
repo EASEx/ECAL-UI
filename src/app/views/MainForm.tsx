@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Checkbox, Modal } from "antd";
-import { useSetRecoilState, useRecoilState } from "recoil";
-import { ROUTE, URLS } from "../store";
+import { Button, Checkbox, Form, Input, message, Modal } from "antd";
 import axios, { AxiosResponse } from "axios";
+import React, { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
+import { ROUTE, URLS } from "../store";
 
 const MainForm = () => {
   const [urls, setURLs] = useRecoilState(URLS);
@@ -16,9 +17,12 @@ const MainForm = () => {
 
   const handleOk = () => {
     setIsModalVisible(false);
-    window.ipcAPI.invoke.submitURLs(urls.serverURL, urls.nbURL).then(() => {
-      setRoute("/bot");
-    });
+    window.ipcAPI.invoke
+      .submitURLs(urls.serverURL, urls.nbURL)
+      .then(() => {
+        setRoute("/bot");
+      })
+      .catch((reason) => message.error(reason));
   };
 
   const handleCancel = () => {
@@ -69,7 +73,7 @@ const MainForm = () => {
           name="nbURL"
           rules={[{ required: true, message: "Please input the notebook url" }]}
         >
-          <Input />
+          <Input defaultValue={"https://colab.research.google.com"} />
         </Form.Item>
 
         <Form.Item
@@ -77,7 +81,7 @@ const MainForm = () => {
           name="serverURL"
           rules={[{ required: true, message: "Please input the server url" }]}
         >
-          <Input />
+          <Input defaultValue={"http://localhost:8080"} />
         </Form.Item>
 
         <Form.Item

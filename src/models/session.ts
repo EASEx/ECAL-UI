@@ -1,4 +1,3 @@
-import { Data } from "dataclass";
 import { DataSnapshot } from "acebase";
 
 interface CellData {

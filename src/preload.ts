@@ -1,7 +1,8 @@
-import { contextBridge, ipcRenderer } from "electron-typescript-ipc";
-import { Api } from "./api";
 import { Method } from "axios";
-import { Metrics } from "./models/session";
+import { contextBridge, ipcRenderer } from "electron-typescript-ipc";
+
+import { Api } from "./api";
+import { Metric } from "./models/session";
 
 const api: Api = {
   invoke: {
@@ -20,7 +21,7 @@ const api: Api = {
     sendAction: async (warning: string) => {
       return await ipcRenderer.invoke<Api>("sendAction", warning);
     },
-    sendMetric: async (client_id: string, test_id: string, metric: Metrics) => {
+    sendMetric: async (client_id: string, test_id: string, metric: Metric) => {
       return await ipcRenderer.invoke<Api>(
         "sendMetric",
         client_id,

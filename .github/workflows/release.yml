@@ -83,6 +83,9 @@ jobs:
             ubuntu-latest-artifacts/**
           body: |
             ${{steps.changelog.outputs.changelog}}
+
+            **Commits:**
+
             ${{steps.changelogv2.outputs.changelog}}
           tag_name: ${{ steps.create_tag.outputs.version }}
 

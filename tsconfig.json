@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "baseUrl": "./src/",
+    "baseUrl": ".",
     "outDir": "dist",
     "jsx": "react",
     "moduleResolution": "node",

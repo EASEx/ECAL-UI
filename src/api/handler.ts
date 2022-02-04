@@ -2,7 +2,6 @@ import axios, { Method } from "axios";
 import { BrowserView, BrowserWindow, dialog } from "electron";
 import { ipcMain } from "electron-typescript-ipc";
 
-import db from "../db";
 import MetricNode, { Metric } from "../models/session";
 import { COLAB_SCRIPT, EVENT_SCRIPT, FETCH_SCRIPT } from "../scripts";
 import { Api } from "../api";
@@ -55,7 +54,7 @@ export const registerDatabaseHandlers = (
 ) => {
   ipcMain.removeHandler<Api>("getDataFromStore");
   ipcMain.handle<Api>("getDataFromStore", async (_event, key: string) => {
-    return db.confDB.get(key);
+    return ecalDB.confDB.get(key);
   });
 
   ipcMain.removeHandler<Api>("sendMetric");

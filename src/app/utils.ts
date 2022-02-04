@@ -38,4 +38,4 @@ const detectWebGL = () => {
     }
 }
 
-export { isValidHttpUrl, isValidWsUrl, detectWebGL }
+export { detectWebGL,isValidHttpUrl, isValidWsUrl }
