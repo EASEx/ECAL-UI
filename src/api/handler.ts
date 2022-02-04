@@ -1,33 +1,25 @@
-import { BrowserView, BrowserWindow, dialog } from "electron";
 import axios, { Method } from "axios";
-
-import { Api } from "./api";
-import db from "../db";
-
+import { BrowserView, BrowserWindow, dialog } from "electron";
 import { ipcMain } from "electron-typescript-ipc";
 
+import db from "../db";
+import MetricNode, { Metric } from "../models/session";
 import { COLAB_SCRIPT, EVENT_SCRIPT, FETCH_SCRIPT } from "../scripts";
-
-import { Metrics } from "../models/session";
+import { Api } from "../api";
+import ecalDB from "../db";
 
 export const registerJupyterHandlers = (
   mainWindow: BrowserWindow,
   agentView: BrowserView,
   jupyterView: BrowserView
 ) => {
-  //** Handler for submitting URLs.*/
   ipcMain.removeHandler<Api>("submitURLs");
   ipcMain.handle<Api>(
     "submitURLs",
     async (_event, serverURL: string, nbURL: string) => {
-      // Load the notebook url.
       await jupyterView.webContents.loadURL(nbURL);
-
-      // Load google colab handlers. Please see scripts/colab.js for more information.
       var script = COLAB_SCRIPT;
       await jupyterView.webContents.executeJavaScript(script);
-
-      // Opens up the SSE Socket to the backend.
       var script = EVENT_SCRIPT;
       jupyterView.webContents.executeJavaScript(
         script
@@ -35,11 +27,9 @@ export const registerJupyterHandlers = (
           .replace("%TEST_ID%", "507f1f77bcf86cd799439011")
           .replace("%SERVER_URL%", serverURL)
       );
-      // await Session.create({
-      //   testId: "507f1f77bcf86cd799439011",
-      //   clientId: "abcd",
-      //   metrics: [],
-      // });
+      await ecalDB.aceDB
+        .ref("tests/507f1f77bcf86cd799439011/sessions/abcd/metrics")
+        .set({});
     }
   );
 
@@ -63,8 +53,7 @@ export const registerDatabaseHandlers = (
   agentView?: BrowserView,
   jupyterView?: BrowserView
 ) => {
-  // Handlers for on disk database.
-  ipcMain.removeHandler<Api>("getDataFromStore"); // This is essential in case you are called multiple times.
+  ipcMain.removeHandler<Api>("getDataFromStore");
   ipcMain.handle<Api>("getDataFromStore", async (_event, key: string) => {
     return db.confDB.get(key);
   });
@@ -72,7 +61,13 @@ export const registerDatabaseHandlers = (
   ipcMain.removeHandler<Api>("sendMetric");
   ipcMain.handle<Api>(
     "sendMetric",
-    async (_event, clientId: string, testId: string, metric: Metrics) => {}
+    async (_event, clientId: string, testId: string, metric: Metric) => {
+      console.log(metric);
+      console.log("Node created!");
+      await ecalDB.aceDB
+        .ref(`tests/${testId}/sessions/${clientId}/metrics`)
+        .push(new MetricNode(metric));
+    }
   );
 };
 
@@ -82,7 +77,7 @@ export const registerAxiosHandlers = (
   jupyterView?: BrowserView
 ) => {
   // Patch axios through the main thread.
-  ipcMain.removeHandler<Api>("request"); // This is essential in case you are called multiple times.
+  ipcMain.removeHandler<Api>("request");
   ipcMain.handle<Api>(
     "request",
     async (_event, url: string, data: any, method: Method) => {

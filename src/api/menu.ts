@@ -1,5 +1,4 @@
-import { BrowserView, Menu, app, dialog, shell } from "electron";
-
+import { app, BrowserView, dialog, Menu, shell } from "electron";
 import defaultMenu from "electron-default-menu";
 
 
