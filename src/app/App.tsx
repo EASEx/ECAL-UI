@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRecoilValue,useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import { CURRENT_ACTION, ROUTE } from "./store";
 import BotPage from "./views/Bot";
@@ -19,7 +19,7 @@ const App = () => {
         return <MainForm />;
 
       case "/bot":
-        return <BotPage />;
+        return <MainForm />;
 
       default:
         return <MainForm />;
